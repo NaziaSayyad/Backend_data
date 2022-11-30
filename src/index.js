@@ -37,7 +37,7 @@ app.post("/signup/writer" ,async (req,res) =>{
             }
         } 
         catch{
-            console.log(e,"erroris:");
+            console.log("erroris:");
             res.send("Invalid token")
         }
     }
@@ -50,18 +50,27 @@ app.post("/login" ,async (req,res) =>{
     const {email, password}  = req.body;
     const find_user = await UserModel.findOne({email,password});
 
+   try{ 
     if(find_user){
-        const token = jwt.sign(
-            {id: find_user.id, name : find_user.name, role : find_user.role},
-            SIGN,
-            {
-                expiresIn : "5 days"
-            }
-        );
-        return res.send({message : "Login Sucess", token});
+    const token = jwt.sign(
+        {id: find_user.id, name : find_user.name, role : find_user.role},
+        SIGN,
+        {
+            expiresIn : "5 days"
+        }
+    );
+    return res.send({message : "Login Sucess", token});
 
     }
+    else{
+        return res.status(401).send("Invalid Credentials");
+    }
+}
+   
+    catch{
     return res.status(401).send("Invalid Credentials");
+   }
+    
     
 });
 
