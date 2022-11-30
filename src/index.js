@@ -26,21 +26,24 @@ app.post("/signup/writer" ,async (req,res) =>{
 
         try{
             const decoded = jwt.decode(token);
-            console.log(decoded.role);
+            // console.log(decoded.role);
             if(decoded && decoded.role === 'admin'){
                 const writer =  new UserModel({name,email,password, role : 'writter'});
                 await writer.save();
                 return res.send("Writer Created Sucessfully")
             }
             else{
-                console.log("You don't have acess to create an writer");
+                res.send("Invalid Token ");
             }
         } 
-        catch(e){
+        catch{
             console.log(e,"erroris:");
+            res.send("Invalid token")
         }
     }
-
+    else{
+        res.status(403).send("You cannot create a writter ")
+    }
 
 })
 app.post("/login" ,async (req,res) =>{
@@ -58,6 +61,8 @@ app.post("/login" ,async (req,res) =>{
         return res.send({message : "Login Sucess", token});
 
     }
+    return res.status(401).send("Invalid Credentials");
+    
 });
 
 
