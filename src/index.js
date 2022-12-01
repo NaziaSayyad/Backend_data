@@ -22,8 +22,9 @@ app.post("/signup", async (req,res) =>{
 app.post("/signup/writer" ,async (req,res) =>{
     const {name,email,password} = req.body;
     const token = req.headers['authorization'];
-    if(token){
-
+    if(!token){
+        return res.status(403).send("You do not have acess to create a writer");
+    }
         try{
             const decoded = jwt.decode(token);
             // console.log(decoded.role);
@@ -33,25 +34,22 @@ app.post("/signup/writer" ,async (req,res) =>{
                 return res.send("Writer Created Sucessfully")
             }
             else{
-                res.send("Invalid Token ");
+                return res.status(403).send("not allow to create a writer ")
             }
         } 
-        catch{
-            console.log("erroris:");
-            res.send("Invalid token")
+        catch(e){
+            console.log("erroris:", e);
+            res.send("Non Admin try to create a writer");
         }
-    }
-    else{
-        res.status(403).send("You cannot create a writter ")
-    }
+    
+    
 
 })
+
 app.post("/login" ,async (req,res) =>{
     const {email, password}  = req.body;
     const find_user = await UserModel.findOne({email,password});
-
-   try{ 
-    if(find_user){
+     if(find_user){
     const token = jwt.sign(
         {id: find_user.id, name : find_user.name, role : find_user.role},
         SIGN,
@@ -62,21 +60,13 @@ app.post("/login" ,async (req,res) =>{
     return res.send({message : "Login Sucess", token});
 
     }
-    else{
         return res.status(401).send("Invalid Credentials");
-    }
-}
-   
-    catch{
-    return res.status(401).send("Invalid Credentials");
-   }
-    
-    
 });
 
 
 mongoose.connect("mongodb://localhost:27017/Bloging").then(() =>{
     app.listen(8080 , () => 
     {console.log(`Server started on port 8080`);
- });
-})
+ })
+}).catch((err) => console.log(err));
+ 
