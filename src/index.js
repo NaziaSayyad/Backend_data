@@ -63,10 +63,15 @@ app.post("/login" ,async (req,res) =>{
         return res.status(401).send("Invalid Credentials");
 });
 
+// mongodb+srv://Nazia:Dob1062000@cluster0.p4xc33c.mongodb.net/?retryWrites=true&w=majority
 
-mongoose.connect("mongodb://localhost:27017/Bloging").then(() =>{
+// mongodb://localhost:27017/Bloging  
+mongoose.connect("mongodb+srv://Nazia:Dob1062000@cluster0.p4xc33c.mongodb.net/?retryWrites=true&w=majority", {
+    useNewUrlParser: "true",
+  useUnifiedTopology: "true"
+}).then(() =>{
     app.listen(8080 , () => 
     {console.log(`Server started on port 8080`);
  })
 }).catch((err) => console.log(err));
- 
+   
