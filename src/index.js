@@ -64,7 +64,7 @@ app.post("/login" ,async (req,res) =>{
 });
 
 
-mongoose.connect("mongodb+srv://Nazia:Dob1062000@cluster0.p4xc33c.mongodb.net/?retryWrites=true&w=majority").then(() =>{
+mongoose.connect("mongodb://localhost:27017/Bloging").then(() =>{
     app.listen(8080 , () => 
     {console.log(`Server started on port 8080`);
  })
