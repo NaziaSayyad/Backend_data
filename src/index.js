@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended :true}))
 
 app.get(`/` ,(req,res) => res.send(`Hello World I am going to start my blogging Site `) );
 
+app.get(`/users` ,(req,res) => res.send(`This is user page  `) );
+
 app.post("/signup", async (req,res) =>{
     const {name,email,password} = req.body;
     const user = new UserModel({ name,email,password});
